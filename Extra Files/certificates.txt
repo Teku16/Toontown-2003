@@ -1,0 +1,47 @@
+This file contains SSL public-key certificates to allow the client to
+confirm the identify of our various account servers when logging in.
+
+
+ttown:1433, for in-house testing.
+-----BEGIN CERTIFICATE-----
+MIICkTCCAfoCAQAwDQYJKoZIhvcNAQEEBQAwgZAxCzAJBgNVBAYTAlVTMRMwEQYD
+VQQIEwpDYWxpZm9ybmlhMREwDwYDVQQHEwhHbGVuZGFsZTEMMAoGA1UEChMDV0RJ
+MREwDwYDVQQLEwhWUlN0dWRpbzEOMAwGA1UEAxMFdHRvd24xKDAmBgkqhkiG9w0B
+CQEWGXRvb250b3duQGRpc25leW9ubGluZS5jb20wHhcNMDIwOTA2MjI0NzI3WhcN
+MDMwOTA2MjI0NzI3WjCBkDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3Ju
+aWExETAPBgNVBAcTCEdsZW5kYWxlMQwwCgYDVQQKEwNXREkxETAPBgNVBAsTCFZS
+U3R1ZGlvMQ4wDAYDVQQDEwV0dG93bjEoMCYGCSqGSIb3DQEJARYZdG9vbnRvd25A
+ZGlzbmV5b25saW5lLmNvbTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAwzuY
+RnozCz2Ir+G1gbiEWP4nmrqyoUq+Pq+XqIuFTFDB/2FOzfE02Z0rsj1UgSqBQAb+
+wvDcD9cdgmJnUv3xXJa9vCG6CQ1XqE0d9uNZnoTR6JS29oOqoPx6dUP5oGpSmhs8
+oCRJ9btBAjbmlc/pGBYxJ20UWDa6bjl9gIm1XT0CAwEAATANBgkqhkiG9w0BAQQF
+AAOBgQAMez2rNsVPwWlGh11OBtQu6mVjf6Pnt1zdfL4OR4kl9oozTp+yDL1/7d3y
+hnYgq6qyRwvJVBQNK05lN2borrhYykcthDzJTWUADwlOtdmak/jsIFtU0zpUxVlh
+Y7MVgiipW2X5baeN8iYm46USColDhTKvLJdI3ulJ5O0kl1sJWQ=3D=3D
+-----END CERTIFICATE-----
+
+
+The remaining lines represent the various certificate authorities.
+These were found in the openssl source code and represent the
+concatenation of openssl/certs/*.pem.
+
+It appears that all we need is this one, which is sufficient to
+authenticate account.toontown.com.
+
+subject=/C=US/O=RSA Data Security, Inc./OU=Secure Server Certification Authority
+notBefore=Nov  9 00:00:00 1994 GMT
+notAfter=Jan  7 23:59:59 2010 GMT
+-----BEGIN CERTIFICATE-----
+MIICNDCCAaECEAKtZn5ORf5eV288mBle3cAwDQYJKoZIhvcNAQECBQAwXzELMAkG
+A1UEBhMCVVMxIDAeBgNVBAoTF1JTQSBEYXRhIFNlY3VyaXR5LCBJbmMuMS4wLAYD
+VQQLEyVTZWN1cmUgU2VydmVyIENlcnRpZmljYXRpb24gQXV0aG9yaXR5MB4XDTk0
+MTEwOTAwMDAwMFoXDTEwMDEwNzIzNTk1OVowXzELMAkGA1UEBhMCVVMxIDAeBgNV
+BAoTF1JTQSBEYXRhIFNlY3VyaXR5LCBJbmMuMS4wLAYDVQQLEyVTZWN1cmUgU2Vy
+dmVyIENlcnRpZmljYXRpb24gQXV0aG9yaXR5MIGbMA0GCSqGSIb3DQEBAQUAA4GJ
+ADCBhQJ+AJLOesGugz5aqomDV6wlAXYMra6OLDfO6zV4ZFQD5YRAUcm/jwjiioII
+0haGN1XpsSECrXZogZoFokvJSyVmIlZsiAeP94FZbYQHZXATcXY+m3dM41CJVphI
+uR2nKRoTLkoRWZweFdVJVCxzOmmCsZc5nG1wZ0jl3S3WyB57AgMBAAEwDQYJKoZI
+hvcNAQECBQADfgBl3X7hsuyw4jrg7HFGmhkRuNPHoLQDQCYCPgmc4RKz0Vr2N6W3
+YQO2WxZpO8ZECAyIUwxrl0nHPjXcbLm7qt9cuzovk2C2qUtN8iD3zV9/ZHuO3ABc
+1/p3yjkWWW8O6tO1g39NTUJWdrTJXwT4OPjr0l91X817/OWOgHz8UA==
+-----END CERTIFICATE-----

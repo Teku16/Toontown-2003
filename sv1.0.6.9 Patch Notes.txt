@@ -1,0 +1,4 @@
+The ActiveX control is now signed by Buena Vista Internet Group. Yes, that is still us. :)
+Some "special" events are scheduled for Toontown Central and other playgrounds. Keep your Toons' eyes peeled for them.
+The view a Toon sees when looking up into the sky has changed, and allows a Toon to spin around while admiring the sky.
+A bug with Toons' emotes turning off entirely instead of just stopping is patched. 

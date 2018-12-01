@@ -1,0 +1,23 @@
+Hello Toontown Stride team, this is a Pack of files from Toontown Online, Dating back to 2003 (included a little bonus), along with the proper programs for the game.
+
+This section is for how to view the .bam files in Panda3D-1.0.5:
+
+1. Install Toontown Online 2003
+
+2. Install Panda3D-1.0.5
+
+3. Get Phase Files from C:\Program Files\Disney\Disney Online\Toontown (something like that :P)
+
+4. Copy the files to the bin folder of Panda3D-1.0.5
+
+5. Extract the files using multify
+
+6. Copy the extracted phase files to the models folder of Panda3D-1.0.5
+
+7. Re-install Panda3D-1.0.5
+
+8. Go to a phase folder in the model folder of Panda3D-1.0.5, then go to a model folder in the phase folder, then go into a folder inside that model folder and look for a .bam file, those are model files for the game. To open them, right click and choose open with, the navigate to the bin folder in Panda3D-1.0.5, and select pview.exe (NOTE, YOU CAN ONLY USE THAT VERSION OF PVIEW IN PANDA3D-1.0.5 TO VIEW THOSE BAM FILES, UNLESS YOU CONVERT THE BAM FILES TO EGG FILES WITH PANDA3D-1.0.5, WITH THE TOOL BAM2EGG, THEN YOU CAN GO TO A NEW VERSION OF PANDA3D AND CONVERT THEM TO NEW BAM FILES USING EGG2BAM)
+
+9. Enjoy! :)
+
+Also, feel free to redistribute the files. :)

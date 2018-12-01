@@ -1,1 +1,1 @@
-This the Toontown Online Source From 2003! Enjoy. :) Here is a link for Panda 3d 1.0.5, Python 2.2.2, and the setup file with the game from 2003: https://drive.google.com/file/d/0BxlR3BWdsF85ZHM5Sy1LU3RYQmM/view?usp=sharing
+Hello there! Today I present a complete and proper dump of the Bytecode from Toontown Online sv1.0.6.9, along with some extra files. Enjoy! BTW, the old Panda 3D is there so you can view the models. I've provided instructions on how to view them properly.
