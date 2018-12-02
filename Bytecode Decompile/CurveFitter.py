@@ -1,0 +1,148 @@
+import types, libpanda, libpandaDowncasts, FFIExternalObject
+
+class CurveFitter(FFIExternalObject.FFIExternalObject):
+    __module__ = __name__
+    __CModuleDowncasts__ = [libpandaDowncasts]
+
+    def __init__(self, *_args):
+        FFIExternalObject.FFIExternalObject.__init__(self)
+        if len(_args) == 1 and _args[0] == None:
+            return
+        apply(self.constructor, _args)
+        return
+
+    def constructor(self):
+        self.this = libpanda._inPHc9WNvxy()
+        self.userManagesMemory = 1
+
+    def __del__(self):
+        if self.userManagesMemory and self.this != 0:
+            self.destructor()
+
+    def destructor(self):
+        if libpanda and libpanda._inPHc9WTI_c:
+            libpanda._inPHc9WTI_c(self.this)
+
+    def getClassType():
+        returnValue = libpanda._inPHc9WS9rR()
+        import TypeHandle
+        returnObject = TypeHandle.TypeHandle(None)
+        returnObject.this = returnValue
+        if returnObject.this == 0:
+            return None
+        returnObject.userManagesMemory = 1
+        return returnObject
+        return
+
+    getClassType = staticmethod(getClassType)
+
+    def reset(self):
+        returnValue = libpanda._inPHc9WIEBv(self.this)
+        return returnValue
+
+    def addXyz(self, t, xyz):
+        returnValue = libpanda._inPHc9WV_r2(self.this, t, xyz.this)
+        return returnValue
+
+    def addHpr(self, t, hpr):
+        returnValue = libpanda._inPHc9WXyG0(self.this, t, hpr.this)
+        return returnValue
+
+    def addXyzHpr(self, t, xyz, hpr):
+        returnValue = libpanda._inPHc9W8TgF(self.this, t, xyz.this, hpr.this)
+        return returnValue
+
+    def getNumSamples(self):
+        returnValue = libpanda._inPHc9WxRbc(self.this)
+        return returnValue
+
+    def getSampleT(self, n):
+        returnValue = libpanda._inPHc9WaZg8(self.this, n)
+        return returnValue
+
+    def getSampleXyz(self, n):
+        returnValue = libpanda._inPHc9WeDCE(self.this, n)
+        import VBase3
+        returnObject = VBase3.VBase3(None)
+        returnObject.this = returnValue
+        if returnObject.this == 0:
+            return None
+        returnObject.userManagesMemory = 1
+        return returnObject
+        return
+
+    def getSampleHpr(self, n):
+        returnValue = libpanda._inPHc9WoADi(self.this, n)
+        import VBase3
+        returnObject = VBase3.VBase3(None)
+        returnObject.this = returnValue
+        if returnObject.this == 0:
+            return None
+        returnObject.userManagesMemory = 1
+        return returnObject
+        return
+
+    def getSampleTangent(self, n):
+        returnValue = libpanda._inPHc9W5bTo(self.this, n)
+        import VBase3
+        returnObject = VBase3.VBase3(None)
+        returnObject.this = returnValue
+        if returnObject.this == 0:
+            return None
+        returnObject.userManagesMemory = 1
+        return returnObject
+        return
+
+    def removeSamples(self, begin, end):
+        returnValue = libpanda._inPHc9WaErD(self.this, begin, end)
+        return returnValue
+
+    def sample(self, curves, count):
+        returnValue = libpanda._inPHc9Wq_E2(self.this, curves.this, count)
+        return returnValue
+
+    def wrapHpr(self):
+        returnValue = libpanda._inPHc9WC25m(self.this)
+        return returnValue
+
+    def sortPoints(self):
+        returnValue = libpanda._inPHc9WUxVM(self.this)
+        return returnValue
+
+    def desample(self, factor):
+        returnValue = libpanda._inPHc9WZ3Ay(self.this, factor)
+        return returnValue
+
+    def computeTangents(self, scale):
+        returnValue = libpanda._inPHc9WsxwM(self.this, scale)
+        return returnValue
+
+    def makeHermite(self):
+        returnValue = libpanda._inPHc9WUvHh(self.this)
+        import ParametricCurveCollection
+        returnObject = ParametricCurveCollection.ParametricCurveCollection(None)
+        returnObject.this = returnValue
+        if returnObject.this == 0:
+            return None
+        returnObject.userManagesMemory = 1
+        return returnObject
+        return
+
+    def makeNurbs(self):
+        returnValue = libpanda._inPHc9WppFN(self.this)
+        import ParametricCurveCollection
+        returnObject = ParametricCurveCollection.ParametricCurveCollection(None)
+        returnObject.this = returnValue
+        if returnObject.this == 0:
+            return None
+        returnObject.userManagesMemory = 1
+        return returnObject
+        return
+
+    def output(self, out):
+        returnValue = libpanda._inPHc9WgDRp(self.this, out.this)
+        return returnValue
+
+    def write(self, out):
+        returnValue = libpanda._inPHc9WX7hW(self.this, out.this)
+        return returnValue

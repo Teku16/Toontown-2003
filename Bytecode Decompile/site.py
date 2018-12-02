@@ -1,0 +1,248 @@
+import sys, os
+
+def makepath(*paths):
+    dir = os.path.abspath(os.path.join(*paths))
+    return (
+     dir, os.path.normcase(dir))
+
+
+for m in sys.modules.values():
+    if hasattr(m, '__file__') and m.__file__:
+        m.__file__ = os.path.abspath(m.__file__)
+
+del m
+L = []
+_dirs_in_sys_path = {}
+for dir in sys.path:
+    if sys.platform != 'mac':
+        if dir and not os.path.isdir(dir):
+            continue
+    else:
+        if dir and not os.path.exists(dir):
+            continue
+    dir, dircase = makepath(dir)
+    if not _dirs_in_sys_path.has_key(dircase):
+        L.append(dir)
+        _dirs_in_sys_path[dircase] = 1
+
+sys.path[:] = L
+del dir
+del L
+if os.name == 'posix' and sys.path and os.path.basename(sys.path[-1]) == 'Modules':
+    from distutils.util import get_platform
+    s = 'build/lib.%s-%.3s' % (get_platform(), sys.version)
+    s = os.path.join(os.path.dirname(sys.path[-1]), s)
+    sys.path.append(s)
+    del get_platform
+    del s
+
+def _init_pathinfo():
+    global _dirs_in_sys_path
+    _dirs_in_sys_path = d = {}
+    for dir in sys.path:
+        if dir and not os.path.isdir(dir):
+            continue
+        dir, dircase = makepath(dir)
+        d[dircase] = 1
+
+
+def addsitedir(sitedir):
+    global _dirs_in_sys_path
+    if _dirs_in_sys_path is None:
+        _init_pathinfo()
+        reset = 1
+    else:
+        reset = 0
+    sitedir, sitedircase = makepath(sitedir)
+    if not _dirs_in_sys_path.has_key(sitedircase):
+        sys.path.append(sitedir)
+    try:
+        names = os.listdir(sitedir)
+    except os.error:
+        return
+    else:
+        names.sort()
+        for name in names:
+            if name[-4:] == os.extsep + 'pth':
+                addpackage(sitedir, name)
+
+        if reset:
+            _dirs_in_sys_path = None
+
+    return
+
+
+def addpackage(sitedir, name):
+    global _dirs_in_sys_path
+    if _dirs_in_sys_path is None:
+        _init_pathinfo()
+        reset = 1
+    else:
+        reset = 0
+    fullname = os.path.join(sitedir, name)
+    try:
+        f = open(fullname)
+    except IOError:
+        return
+    else:
+        while 1:
+            dir = f.readline()
+            if not dir:
+                break
+            if dir[0] == '#':
+                continue
+            if dir.startswith('import'):
+                exec dir
+                continue
+            if dir[-1] == '\n':
+                dir = dir[:-1]
+            dir, dircase = makepath(sitedir, dir)
+            if not _dirs_in_sys_path.has_key(dircase) and os.path.exists(dir):
+                sys.path.append(dir)
+                _dirs_in_sys_path[dircase] = 1
+
+        if reset:
+            _dirs_in_sys_path = None
+
+    return
+
+
+prefixes = [
+ sys.prefix]
+if sys.exec_prefix != sys.prefix:
+    prefixes.append(sys.exec_prefix)
+for prefix in prefixes:
+    if prefix:
+        if os.sep == '/':
+            sitedirs = [
+             os.path.join(prefix, 'lib', 'python' + sys.version[:3], 'site-packages'), os.path.join(prefix, 'lib', 'site-python')]
+        else:
+            sitedirs = [
+             prefix, os.path.join(prefix, 'lib', 'site-packages')]
+        for sitedir in sitedirs:
+            if os.path.isdir(sitedir):
+                addsitedir(sitedir)
+
+_dirs_in_sys_path = None
+if os.sep == ':':
+    exit = 'Use Cmd-Q to quit.'
+else:
+    if os.sep == '\\':
+        exit = 'Use Ctrl-Z plus Return to exit.'
+    else:
+        exit = 'Use Ctrl-D (i.e. EOF) to exit.'
+import __builtin__
+__builtin__.quit = __builtin__.exit = exit
+del exit
+
+class _Printer:
+    __module__ = __name__
+    MAXLINES = 23
+
+    def __init__(self, name, data, files=(), dirs=()):
+        self.__name = name
+        self.__data = data
+        self.__files = files
+        self.__dirs = dirs
+        self.__lines = None
+        return
+
+    def __setup(self):
+        if self.__lines:
+            return
+        data = None
+        for dir in self.__dirs:
+            for file in self.__files:
+                file = os.path.join(dir, file)
+                try:
+                    fp = open(file)
+                    data = fp.read()
+                    fp.close()
+                    break
+                except IOError:
+                    pass
+
+            if data:
+                break
+
+        if not data:
+            data = self.__data
+        self.__lines = data.split('\n')
+        self.__linecnt = len(self.__lines)
+        return
+
+    def __repr__(self):
+        self.__setup()
+        if len(self.__lines) <= self.MAXLINES:
+            return ('\n').join(self.__lines)
+        else:
+            return 'Type %s() to see the full %s text' % ((self.__name,) * 2)
+
+    def __call__(self):
+        self.__setup()
+        prompt = 'Hit Return for more, or q (and Return) to quit: '
+        lineno = 0
+        while 1:
+            try:
+                for i in range(lineno, lineno + self.MAXLINES):
+                    print self.__lines[i]
+
+            except IndexError:
+                break
+            else:
+                lineno += self.MAXLINES
+                key = None
+                while key is None:
+                    key = raw_input(prompt)
+                    if key not in ('', 'q'):
+                        key = None
+
+                if key == 'q':
+                    break
+
+        return
+
+
+__builtin__.copyright = _Printer('copyright', sys.copyright)
+if sys.platform[:4] == 'java':
+    __builtin__.credits = _Printer('credits', 'Jython is maintained by the Jython developers (www.jython.org).')
+else:
+    __builtin__.credits = _Printer('credits', 'Thanks to CWI, CNRI, BeOpen.com, Digital Creations and a cast of thousands\nfor supporting Python development.  See www.python.org for more information.')
+here = os.path.dirname(os.__file__)
+__builtin__.license = _Printer('license', 'See http://www.python.org/%.3s/license.html' % sys.version, [
+ 'LICENSE.txt', 'LICENSE'], [
+ os.path.join(here, os.pardir), here, os.curdir])
+
+class _Helper:
+    __module__ = __name__
+
+    def __repr__(self):
+        return 'Type help() for interactive help, or help(object) for help about object.'
+
+    def __call__(self, *args, **kwds):
+        import pydoc
+        return pydoc.help(*args, **kwds)
+
+
+__builtin__.help = _Helper()
+encoding = 'ascii'
+if encoding != 'ascii':
+    sys.setdefaultencoding(encoding)
+try:
+    import sitecustomize
+except ImportError:
+    pass
+else:
+    if hasattr(sys, 'setdefaultencoding'):
+        del sys.setdefaultencoding
+
+    def _test():
+        print 'sys.path = ['
+        for dir in sys.path:
+            print '    %s,' % `dir`
+
+        print ']'
+
+
+    if __name__ == '__main__':
+        _test()

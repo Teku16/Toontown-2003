@@ -1,0 +1,115 @@
+from ShowBaseGlobal import *
+import ShtikerPage
+from DirectGui import *
+import Quests, NPCToons, ZoneUtil, ToontownGlobals, Localizer, QuestPoster
+
+class QuestPage(ShtikerPage.ShtikerPage):
+    __module__ = __name__
+
+    def __init__(self):
+        ShtikerPage.ShtikerPage.__init__(self)
+        self.quests = {0: None, 1: None, 2: None, 3: None}
+        self.textRolloverColor = Vec4(1, 1, 0, 1)
+        self.textDownColor = Vec4(0.5, 0.9, 1, 1)
+        self.textDisabledColor = Vec4(0.4, 0.8, 0.4, 1)
+        self.onscreen = 0
+        return
+
+    def load(self):
+        self.title = DirectLabel(parent=self, relief=None, text=Localizer.QuestPageToonTasks, text_scale=0.12, textMayChange=0, pos=(0, 0, 0.6))
+        questFramePlaceList = (
+         (
+          -0.45, 0, 0.25, 0, 0, 0), (-0.45, 0, -0.35, 0, 0, 0), (0.45, 0, 0.25, 0, 0, 0), (0.45, 0, -0.35, 0, 0, 0))
+        self.questFrames = []
+        for i in range(ToontownGlobals.MaxQuestCarryLimit):
+            frame = QuestPoster.QuestPoster(reverse=i > 1)
+            frame.reparentTo(self)
+            frame.setPosHpr(*questFramePlaceList[i])
+            frame.setScale(1.06)
+            self.questFrames.append(frame)
+
+        return
+
+    def acceptOnscreenHooks(self):
+        self.accept(ToontownGlobals.QuestsHotkeyOn, self.showQuestsOnscreen)
+        self.accept(ToontownGlobals.QuestsHotkeyOff, self.hideQuestsOnscreen)
+
+    def ignoreOnscreenHooks(self):
+        self.ignore(ToontownGlobals.QuestsHotkeyOn)
+        self.ignore(ToontownGlobals.QuestsHotkeyOff)
+
+    def unload(self):
+        del self.title
+        del self.quests
+        del self.questFrames
+        loader.unloadModel('phase_3.5/models/gui/stickerbook_gui')
+        ShtikerPage.ShtikerPage.unload(self)
+
+    def clearQuestFrame(self, index):
+        self.questFrames[index].clear()
+        self.quests[index] = None
+        return
+
+    def fillQuestFrame(self, questDesc, index):
+        self.questFrames[index].update(questDesc)
+        self.quests[index] = questDesc
+
+    def getLowestUnusedIndex(self):
+        for i in range(ToontownGlobals.MaxQuestCarryLimit):
+            if self.quests[i] == None:
+                return i
+
+        return -1
+        return
+
+    def updatePage(self):
+        newQuests = toonbase.localToon.quests
+        carryLimit = toonbase.localToon.getQuestCarryLimit()
+        for i in range(ToontownGlobals.MaxQuestCarryLimit):
+            if i < carryLimit:
+                self.questFrames[i].show()
+            else:
+                self.questFrames[i].hide()
+
+        for index, questDesc in self.quests.items():
+            if questDesc is not None and list(questDesc) not in newQuests:
+                self.clearQuestFrame(index)
+
+        for questDesc in newQuests:
+            newQuestDesc = tuple(questDesc)
+            if newQuestDesc not in self.quests.values():
+                index = self.getLowestUnusedIndex()
+                self.fillQuestFrame(newQuestDesc, index)
+
+        for i in self.quests.keys():
+            questDesc = self.quests[i]
+            if questDesc:
+                questId = questDesc[0]
+                if Quests.getQuestClass(questId) == Quests.FriendQuest:
+                    self.questFrames[i].update(questDesc)
+
+        return
+
+    def enter(self):
+        self.updatePage()
+        ShtikerPage.ShtikerPage.enter(self)
+
+    def exit(self):
+        ShtikerPage.ShtikerPage.exit(self)
+
+    def showQuestsOnscreen(self):
+        if self.onscreen:
+            return
+        self.onscreen = 1
+        self.updatePage()
+        self.reparentTo(aspect2d)
+        self.title.hide()
+        self.show()
+
+    def hideQuestsOnscreen(self):
+        if not self.onscreen:
+            return
+        self.onscreen = 0
+        self.reparentTo(self.book)
+        self.title.show()
+        self.hide()
